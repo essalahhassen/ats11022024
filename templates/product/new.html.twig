@@ -1,0 +1,24 @@
+{# templates/product/new.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nouveau Produit</title>
+    <!-- Intégration de Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Nouveau Produit</h1>
+        <form method="post">
+            {{ form_start(form) }}
+            {{ form_row(form.productName) }}
+            {{ form_row(form.category) }}
+            {{ form_row(form.price) }}
+            {{ form_row(form.save) }}
+            {{ form_end(form) }}
+        </form>
+    </div>
+</body>
+</html>

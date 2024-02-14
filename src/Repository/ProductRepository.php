@@ -46,7 +46,7 @@ class ProductRepository extends ServiceDocumentRepository
         $filteredProducts = [];
         foreach ($products as $product) {
             $averageRating = $this->calculateAverageRating($product);
-            if ($averageRating !== null && $averageRating >= $minAvgRating) {
+            if ($averageRating >= $minAvgRating) {
                 $filteredProducts[] = $product;
             }
         }

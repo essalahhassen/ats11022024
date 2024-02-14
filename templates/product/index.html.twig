@@ -12,6 +12,8 @@
 <body>
     <div class="container">
         <h1>Liste des produits</h1>
+        {# Bouton Nouveau produit #}
+        <a href="{{ path('app_product_new') }}" class="btn btn-primary mb-3">Nouveau produit</a>
         {# Formulaire de recherche #}
         <form action="{{ path('app_products') }}" method="get" class="mb-4">
             <div class="form-row">
@@ -53,6 +55,7 @@
                             <p class="card-text"><b>Image URL:</b>{{ product.imageUrl }}</p>
                             <p class="card-text"><b>Catégorie: </b>{{ product.category }}</p>
                             <p class="card-text"><b>Prix:</b> {{ product.price }}</p>
+                            <a href="{{ path('product_details', {'id': product.id}) }}" class="btn btn-primary">Afficher détails</a>
                         </div>
                     </div>
                 </div>

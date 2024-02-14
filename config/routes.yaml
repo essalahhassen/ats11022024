@@ -5,7 +5,21 @@ controllers:
     type: attribute
 index:
     path: /
-    controller: App\Controller\DefaultController::index
+    controller: App\Controller\ProductsController::index
 app_products:
     path: /product
     controller: App\Controller\ProductsController::index
+
+product_details:
+    path: /product/{id}
+    controller: App\Controller\ProductsController::show
+
+app_product_new:
+    path: /product/new
+    controller: App\Controller\ProductController::new
+    methods: [GET, POST]
+    
+product_delete:
+    path: /product/{id}/delete
+    controller: App\Controller\ProductsController::delete
+

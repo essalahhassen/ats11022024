@@ -18,7 +18,7 @@ class Product
     protected ?string $productName;
 
     #[MongoDB\Field(type: Type::STRING)]
-    protected ?string $description;
+    protected ?string $description='';
 
     #[MongoDB\Field(type: Type::FLOAT)]
     protected ?float $price;
@@ -27,7 +27,7 @@ class Product
     protected ?string $category;
 
     #[MongoDB\Field(type: Type::STRING)]
-    protected ?string $imageUrl;
+    protected ?string $imageUrl='';
 
     #[MongoDB\EmbedMany(targetDocument: Review::class)]
     protected $reviews;
@@ -36,6 +36,8 @@ class Product
     public function __construct()
     {
         $this->reviews = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->imageUrl = '';
+        $this->description = '';
     }
 
     public function getId(): ?string
