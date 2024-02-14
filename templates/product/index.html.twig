@@ -1,38 +1,68 @@
 {# templates/index.html.twig #}
 
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Liste des produits</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
-    <h1>Liste des produits</h1>
-    {# Formulaire de recherche #}
-    <form action="{{ path('app_products') }}" method="get">
-        <label for="searchTerm">Recherche par nom de produit :</label>
-        <input type="text" id="searchTerm" name="searchTerm" value="{{ app.request.query.get('searchTerm') }}" />
+    <div class="container">
+        <h1>Liste des produits</h1>
+        {# Formulaire de recherche #}
+        <form action="{{ path('app_products') }}" method="get" class="mb-4">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="searchTerm">Recherche par nom de produit :</label>
+                    <input type="text" class="form-control" id="searchTerm" name="searchTerm" value="{{ app.request.query.get('searchTerm') }}" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="category">Catégorie :</label>
+                    <select class="form-control" id="category" name="category">
+                        <option value="">Toutes les catégories</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="minPrice">Prix minimum :</label>
+                    <input type="number" class="form-control" id="minPrice" name="minPrice" value="{{ app.request.query.get('minPrice') }}" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="minAvgRating">Note moyenne min :</label>
+                    <input type="number" class="form-control" id="minAvgRating" name="minAvgRating" step="0.1" value="{{ app.request.query.get('minAvgRating') }}" />
+                </div>
+                <div class="form-group col-md-2">
+                    <button type="submit" class="btn btn-primary mt-4">Rechercher</button>
+                </div>
+            </div>
+        </form>
         
-        <label for="category">Catégorie :</label>
-        <input type="text" id="category" name="category" value="{{ app.request.query.get('category') }}" />
-        
-        <label for="minPrice">Prix minimum :</label>
-        <input type="number" id="minPrice" name="minPrice" value="{{ app.request.query.get('minPrice') }}" />
-        
-        <button type="submit">Rechercher</button>
-    </form>
-    <ul>
-        {% for product in products %}
-            <li>
-                <h2>{{ product.productName }}</h2>
-                <p>Catégorie: {{ product.category }}</p>
-                <p>Prix: {{ product.price }}</p>
-                <img src="{{ product.imageUrl }}" alt="{{ product.productName }}">
-            </li>
-        {% endfor %}
-    </ul>
-   {# Affichage de la pagination #}
-    <div class="pagination">
-        {{ knp_pagination_render(products) }}
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-4">
+                    <div class="card product-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.productName }}</h5>
+
+                            <p class="card-text">{{ product.description }}</p>
+                            <p class="card-text"><b>Image URL:</b>{{ product.imageUrl }}</p>
+                            <p class="card-text"><b>Catégorie: </b>{{ product.category }}</p>
+                            <p class="card-text"><b>Prix:</b> {{ product.price }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {# Affichage de la pagination #}
+        <div class="pagination mt-4">
+            {{ knp_pagination_render(products) }}
+        </div>
     </div>
 </body>
 </html>

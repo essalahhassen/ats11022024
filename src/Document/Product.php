@@ -31,6 +31,7 @@ class Product
 
     #[MongoDB\EmbedMany(targetDocument: Review::class)]
     protected $reviews;
+    
 
     public function __construct()
     {
@@ -113,4 +114,18 @@ class Product
         $this->reviews->removeElement($review);
         return $this;
     }
+    public function getAvgRating(): ?float
+    {
+        if ($this->reviews->isEmpty()) {
+            return null;
+        }
+
+        $totalRating = 0;
+        foreach ($this->reviews as $review) {
+            $totalRating += $review->getValue();
+        }
+
+        return $totalRating / $this->reviews->count();
+    }
+
 }

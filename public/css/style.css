@@ -1,0 +1,96 @@
+/* Ajoutez ces styles à votre fichier CSS ou balise <style> dans le HTML */
+
+/* Styles pour le formulaire de recherche */
+.form-row {
+    margin-bottom: 20px;
+}
+
+/* Styles pour les champs de formulaire */
+.form-control {
+    border-radius: 0;
+}
+
+/* Styles pour le bouton de recherche */
+.btn-primary {
+    border-radius: 0;
+}
+
+/* Styles pour la pagination */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Styles pour les liens de pagination */
+.pagination .page-link {
+    border-radius: 0;
+}
+
+/* Styles pour le lien de pagination actif */
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Styles pour les éléments de pagination précédent/suivant */
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+}
+
+/* Styles pour les cartes de produit */
+.product-card {
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    min-height: 270px;
+}
+
+/* Styles pour l'image du produit dans la carte */
+.product-card img {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/* Styles pour le titre du produit dans la carte */
+.product-card .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Styles pour le texte du produit dans la carte */
+.product-card .card-text {
+    font-size: 0.875rem;
+}
+
+.product {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    height: 200px; /* Hauteur fixe pour chaque bloc */
+    overflow: hidden; /* Cacher le contenu dépassant */
+}
+
+.product h2 {
+    margin-top: 0; /* Supprimer la marge supérieure par défaut */
+    font-size: 18px; /* Taille de police pour le titre */
+}
+
+.product p {
+    margin: 5px 0; /* Marge autour des paragraphes */
+    font-size: 14px; /* Taille de police pour le contenu */
+}
+
+.product ul {
+    margin-top: 5px; /* Marge supérieure pour la liste */
+    padding-left: 20px; /* Retrait à gauche pour la liste */
+    list-style: none; /* Supprimer les puces de la liste */
+}
+
+.product li {
+    margin-bottom: 5px; /* Marge inférieure pour chaque élément de liste */
+}
+.card-body{
+    min-height: 325px !important;
+    margin-bottom: 50px !important;
+}
