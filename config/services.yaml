@@ -31,6 +31,13 @@ services:
 
 
 
+    App\EventListener\ProductEventListener:
+        arguments:
+            $cache: '@odm_cache_pool'
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber }
+
+
 
 
 

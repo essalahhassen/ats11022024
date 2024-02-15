@@ -13,61 +13,63 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ProductRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Form\FormFactoryInterface;
-
-
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class ProductsController extends AbstractController
 {
-
-
     private $documentManager;
+    private $cache;
 
-    public function __construct(DocumentManager $documentManager)
+    public function __construct(DocumentManager $documentManager, CacheInterface $cache)
     {
         $this->documentManager = $documentManager;
+        $this->cache = $cache;
     }
 
-    #[Route('/product', name: 'app_products',methods:['POST'])]
+    #[Route('/product', name: 'app_products', methods:['POST'])]
     public function index(ProductRepository $productRepository, PaginatorInterface $paginator, RequestStack $requestStack): Response
     {
-
-        // Obtenez l'objet Request à partir de RequestStack
         $request = $requestStack->getCurrentRequest();
+        $cacheKey = md5($request->getQueryString());
 
-        $searchTerm = $request->query->get('search', '');
-        $allProducts = [];
-        $searchTerm = $request->query->get('searchTerm', '');
-        $category = $request->query->get('category', '');
-        $minPrice = $request->query->get('minPrice', '');
-        $minAvgRating = floatval($request->query->get('minAvgRating', ''));
+        $products = $this->cache->get($cacheKey, function (ItemInterface $item) use ($productRepository, $paginator, $request) {
+            $searchTerm = $request->query->get('search', '');
+            $category = $request->query->get('category', '');
+            $minPrice = $request->query->get('minPrice', '');
+            $minAvgRating = floatval($request->query->get('minAvgRating', ''));
 
-        $allProducts = $productRepository->findByCriteria($searchTerm, $category, $minPrice, $minAvgRating);
+            $allProducts = $productRepository->findByCriteria($searchTerm, $category, $minPrice, $minAvgRating);
+            $item->expiresAfter(3600); // Cache expires in 1 hour
 
-        // Déterminez si la recherche de la moyenne des notes est en cours
-        $avgRatingSearch = ($minAvgRating > 0);
+            return $paginator->paginate(
+                $allProducts,
+                $request->query->getInt('page', 1),
+                5
+            );
+        });
 
-        // Récuperer la liste des catégories
-        $categories = $productRepository->findAllCategories();
-
-        // Paginer les produits
-        $products = $paginator->paginate(
-            $allProducts,                        // Requête paginée
-            $request->query->getInt('page', 1),  // Numéro de page
-            5                                  // Nombre d'éléments par page
-        );
-
-       // Retourner la réponse avec les produits
-       return $this->render('product/index.html.twig', [
-           'products' => $products,
-           'avgRatingSearch' => $avgRatingSearch, // Passer la variable avgRatingSearch au template Twig
-           'categories' => $categories,// Passer la variable categories au template Twig
-       ]);
+        return $this->render('product/index.html.twig', [
+            'products' => $products,
+            'avgRatingSearch' => ($request->query->get('minAvgRating') > 0),
+            'categories' => $productRepository->findAllCategories(),
+        ]);
     }
+
     #[Route('/product/{id}', name: 'product_details')]
     public function show($id, ProductRepository $productRepository): Response
     {
-        $product = $productRepository->find($id);
+        $product = $this->cache->get('product_' . $id, function (ItemInterface $item) use ($productRepository, $id) {
+            $product = $productRepository->find($id);
+            $item->expiresAfter(3600); // Cache expires in 1 hour
+
+            return $product;
+        });
+
+        if (!$product) {
+            throw $this->createNotFoundException('Product not found');
+        }
+
         $avgRating = $productRepository->calculateAverageRating($product);
 
         return $this->render('product/details.html.twig', [
@@ -108,7 +110,6 @@ class ProductsController extends AbstractController
         $this->documentManager->remove($product);
         $this->documentManager->flush();
 
-        // Rediriger vers la liste des produits après la suppression
         return $this->redirectToRoute('app_products');
     }
 }

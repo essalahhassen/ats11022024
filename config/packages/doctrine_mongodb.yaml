@@ -13,6 +13,9 @@ doctrine_mongodb:
                 App:
                     dir: '%kernel.project_dir%/src/Document'
                     prefix: 'App\Document'
+            metadata_cache_driver:
+                type: service
+                id: odm_cache_pool
 
 when@prod:
     doctrine_mongodb:
