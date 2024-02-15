@@ -40,8 +40,9 @@ class ImportProductsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $apiUrl = getenv('API_URL'); 
         $output->writeln('Importing products...');
-        $this->productImportService->importProductsFromUrl('https://tech.dev.ats-digital.com/api/products?size=5000');
+        $this->productImportService->importProductsFromUrl($apiUrl);
         $output->writeln('Products imported successfully.');
 
         return Command::SUCCESS;
